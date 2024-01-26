@@ -24,6 +24,17 @@ It's a safe and fun way to learn more about ETS and Elixir's concurrency model.
 
 Start the program with `elixir cloudcomputing.exs`.  It will start and begin to produce and analyze data.  Exit it with ctrl-c.
 
+## Why no mix file in this project?
+
+This file is just for playing around with in an easy way.  This [excellent article about ETS](https://blog.appsignal.com/2019/11/12/caching-with-elixir-and-ets.html) points out:
+
+>Integration of Unnecessary Dependencies
+
+>ETS is part of the Erlang VM, so there are no additional dependencies necessary when using it.
+
+This way you can try ETS without worrying about any dependencies or setting anything up - one of its major benefits is that it is built in.
+
+
 ## Ready to help someone learn more Elixir?
 The author Robert Viragh is looking for a position as an Elixir and Phoenix developer, if you have an opening feel free to reach out: rviragh at gmail.com
 
