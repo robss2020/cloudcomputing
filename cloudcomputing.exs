@@ -62,9 +62,7 @@ defmodule SensorSimulator do
     current_size = :ets.info(:sensor_data, :size)
     if current_size > @max_entries do
       oldest_allowed_time = System.os_time(:millisecond) - @max_entries
-      :ets.tab2list(:sensor_data)
-      |> Enum.filter(fn {time, _} -> time < oldest_allowed_time end)
-      |> Enum.each(fn {time, _} -> :ets.delete(:sensor_data, time) end)
+      :ets.select_delete(:sensor_data, [{{:"$1", :"$2"}, [{:<, :"$1", oldest_allowed_time}], [true]}])
     end
   end
 
