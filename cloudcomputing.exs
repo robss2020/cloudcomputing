@@ -15,26 +15,26 @@ defmodule SensorSimulator do
 
   # Starts the GenServer
   def start_link(_) do
-    GenServer.start_link(__MODULE__, :ok, name: __MODULE__)
+    _pid = GenServer.start_link(__MODULE__, :ok, name: __MODULE__)
   end
 
   # Initializes the ETS table and starts the sensor simulation
   def init(:ok) do
     # Use `:named_table` to allow access from other processes
     :ets.new(:sensor_data, [:set, :public, :named_table])
-    schedule_sensor_read()
-    schedule_cleanup()
+    _ref = schedule_sensor_read()
+    _ref = schedule_cleanup()
     {:ok, %{}}
   end
 
   # Schedules sensor readings
   defp schedule_sensor_read do
-    Process.send_after(self(), :read_sensor, 1)
+    _ref = Process.send_after(self(), :read_sensor, 1)
   end
 
   # Schedules ETS cleanup
   defp schedule_cleanup do
-    Process.send_after(self(), :cleanup, @cleanup_interval)
+    _ref = Process.send_after(self(), :cleanup, @cleanup_interval)
   end
 
   # Handles sensor readings
@@ -43,7 +43,7 @@ defmodule SensorSimulator do
     true_temp = calculate_true_temp(current_time)
     simulated_temp = simulate_sensor_reading(true_temp)
     :ets.insert(:sensor_data, {current_time, simulated_temp})
-    schedule_sensor_read()
+    _ref = schedule_sensor_read()
     {:noreply, state}
    
   end
@@ -52,8 +52,8 @@ defmodule SensorSimulator do
 
   # Handles ETS cleanup
   def handle_info(:cleanup, state) do
-    cleanup_ets()
-    schedule_cleanup()
+    _result = cleanup_ets()
+    _ref = schedule_cleanup()
     {:noreply, state}
   end
 
@@ -83,8 +83,7 @@ defmodule SensorSimulator do
 
   # Public function to start the analysis process
   def start_analysis do
-     # Use `spawn` instead of `spawn_link` to avoid linking the process
-     spawn(fn -> analyze_temperature() end)
+     _status = Task.start(fn -> analyze_temperature() end)
   end
 
   # Periodically analyze temperature data
