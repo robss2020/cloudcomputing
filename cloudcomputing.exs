@@ -112,8 +112,8 @@ defmodule SensorSimulator do
 
   # Fetches readings from the last specified milliseconds
   defp readings_in_last(milliseconds, current_time) do
-    readings = :ets.tab2list(:sensor_data)
-                  |> Enum.filter(fn {time, _temp} -> time >= current_time - milliseconds end)
+    match_spec = [{{:"$1", :"$2"}, [{:>=, :"$1", current_time - milliseconds}], [{{:"$1", :"$2"}}]}]
+    readings = :ets.select(:sensor_data, match_spec)
     readings
   end
 
